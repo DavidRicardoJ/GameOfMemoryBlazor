@@ -1,0 +1,138 @@
+﻿
+<h1>Jogo da Memória</h1>
+<br />
+
+@if (ListUrlImages.Count > 0)
+{
+    <div class="game-container">
+
+        @for (int i = 0; i < NumberImages; i++)
+        {
+            int j = i;
+            <div class=" @ClassName[j]" @onclick="()=> FlipCard(j)">
+                <img src="@ListUrlImages[i]" class="front-card" />
+                <img src="@ImageDefaultCard" class="back-card" />
+            </div>
+        }
+    </div>
+}
+else
+{
+    <h2>Loading ...</h2>
+}
+
+<Modal @ref="modal" Title="Jogo da Memória" Show="modalIsVisible" Confirm="RestartGame" >
+    <div >
+        <h2>Parabéns!</h2>
+        <h3>Você conseguiu em @attempts tentativas.</h3>
+    </div>
+</Modal>
+
+
+
+
+@code {
+    [Parameter] public int NumberImages { get; set; }
+    [Parameter] public List<string> ListUrlImages { get; set; }
+    [Parameter] public string ImageDefaultCard { get; set; }
+    private List<string> ClassName { get; set; } = new List<string>();
+    Modal modal;
+    GameContainer game;
+    int attempts = 0; //tentativas
+
+    int cardPosition1 = 0, cardPosition2 = 0, cards = 0;
+    bool isBlock = false;
+    List<int> pairs = new List<int>();
+    bool modalIsVisible = false;
+
+    protected override void OnInitialized()
+    {
+        game = new GameContainer();
+        AddClassName();
+    }
+
+    private void AddClassName()
+    {
+        for (int i = 0; i < NumberImages; i++)
+        {
+            ClassName.Add("memory-card ");
+        }
+    }
+
+    private async void FlipCard(int position)
+    {
+        if (isBlock || pairs.Contains(position)) return;
+
+        if (cards == 0)
+        {
+            ClassName[position] = "memory-card flip-back flip-front";
+            cardPosition1 = position;
+            cards++;
+        }
+        else
+        {
+            isBlock = true;
+            cardPosition2 = position;
+            if (cardPosition1 == cardPosition2)
+            {
+                isBlock = false;
+                return;
+            }
+            ClassName[position] = "memory-card flip-back flip-front";
+            await Task.Delay(TimeSpan.FromSeconds(1.2));
+
+            if (!CheckMatchingCards(cardPosition1, cardPosition2))
+            {
+                ClassName[cardPosition1] = "memory-card ";
+                ClassName[cardPosition2] = "memory-card ";
+            }
+            cards = 0;
+            isBlock = false;
+            StateHasChanged();
+            if (pairs.Count == NumberImages)
+            {
+                Win();
+            }
+        }
+
+    }
+
+    private bool CheckMatchingCards(int pos1, int pos2)
+    {
+        if (ListUrlImages[pos1].Equals(ListUrlImages[pos2]))
+        {
+            pairs.Add(pos1);
+            pairs.Add(pos2);
+            attempts++;
+            return true;
+        }
+        else
+        {
+            attempts++;
+            return false;
+        }
+    }
+
+    private void Win()
+    {
+        modalIsVisible = true;
+        StateHasChanged();
+
+    }
+
+    private void RestartGame()
+    {
+        modalIsVisible = false;
+        ListUrlImages = game.GetImagesUrl(new Level1Configuration());
+        cardPosition1 = 0; cardPosition2 = 0; cards = 0;
+        isBlock = false;
+        pairs.Clear();
+        attempts = 0;
+        ClassName.Clear();
+        AddClassName();
+        StateHasChanged();
+    }
+
+
+}
+
