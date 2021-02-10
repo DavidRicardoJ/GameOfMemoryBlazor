@@ -1,25 +1,33 @@
-﻿<h3>GameContainer</h3>
-
-<Card ListUrlImages="@ImagesUrl" ImageDefaultCard="@ImageDefaultUrl" NumberImages="NumberOfImages"></Card>
+﻿
+<div>
+    <Card ListUrlImages="@ImagesUrl" ImageDefaultCard="@ImageDefaultUrl" NumberImages="NumberOfImages" ColumnNumber="@ColumnNumber"></Card>
+</div>
 
 
 @code {
     public List<string> ImagesUrl { get; set; }
     public string ImageDefaultUrl { get; set; }
     public int NumberOfImages { get; set; }
+    public int ColumnNumber { get; set; }
 
     ImagesGetUrl imagesGetUrl = new ImagesGetUrl();
+    LevelModel level;
+    
+   
 
     protected override void OnInitialized()
     {
+       
+        level = new Level1Configuration();
         ImagesUrl = new List<string>();
+        ColumnNumber = level.ColumnNumber;
         StartGame();
     }
 
     public void StartGame()
     {
-        ImagesUrl = GetImagesUrl(new Level1Configuration());
-        ImageDefaultUrl = imagesGetUrl.ImageDefaultGetUrl(new Level1Configuration());
+        ImagesUrl = GetImagesUrl(level);
+        ImageDefaultUrl = GetImageDefault(level);
         NumberOfImages = ImagesUrl.Count;
     }
 
@@ -27,5 +35,11 @@
     {
         return imagesGetUrl.GetRandonUrl(level);
     }
+
+    public string GetImageDefault(LevelModel level)
+    {
+        return imagesGetUrl.ImageDefaultGetUrl(level);
+    }
+
 
 }

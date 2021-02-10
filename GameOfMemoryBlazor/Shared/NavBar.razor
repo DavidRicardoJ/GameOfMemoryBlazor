@@ -1,0 +1,63 @@
+﻿
+
+<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3" id="menu">
+    <div class="container">
+        <a class="navbar-brand" href="">Jogo da Memória</a>
+        <button class="navbar-toggler" type="button" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+            <ul class="navbar-nav flex-grow-1" id="itens">
+                <li class="nav-item">
+                    <NavLink class="nav-link text-dark" href="/" Match="NavLinkMatch.All">
+                        <span class="oi oi-home" aria-hidden="true"></span> Home
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link text-dark" href="about">
+                        <span class="oi oi-globe" aria-hidden="true"></span> Sobre
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link text-dark" href="/contact">
+                        <span class="oi oi-envelope-closed" aria-hidden="true"></span> Contato
+                    </NavLink>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+@code {    
+    bool collapseNavMenu = true;
+
+    string baseMenuClass = "navbar-collapse d-sm-inline-flex flex-sm-row-reverse";
+
+    string NavMenuCssClass => baseMenuClass + (collapseNavMenu ? " collapse" : "");
+
+    void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}
+
+<style>
+    #itens {
+        justify-content: flex-end;       
+    }
+    #menu {
+        background: rgb(255,215,0);
+        background: linear-gradient(90deg, rgba(255,215,0,1) 0%, rgba(101,190,91,1) 50%, rgba(255,215,0,1) 100%);
+    }
+
+    .nav-item span{
+        color:white;
+    }
+
+    @@media(max-width: 64em) and (orientation:landscape) {
+        #menu {
+            height: 35px !important;
+        }
+    }
+
+</style>

@@ -33,6 +33,7 @@ namespace GameOfMemoryBlazor.Services
             {
                 listRandom.Add(ImagesUrl[indice[i]]);
             }
+
             return listRandom;
         }
 
@@ -46,11 +47,11 @@ namespace GameOfMemoryBlazor.Services
             var ImagesUrl = new List<string>();
             for (int i = 0; i < (levelModel.NumberOfImages); i++)
             {
-                ImagesUrl.Add(levelModel.ImageBaseUrl + $"image{i + 1}.png");                
-                ImagesUrl.Add(levelModel.ImageBaseUrl + $"image{i + 1}.png");                
+                ImagesUrl.Add(levelModel.ImageBaseUrl + $"image{i + 1}{levelModel.FileExtension}");
+                ImagesUrl.Add(levelModel.ImageBaseUrl + $"image{i + 1}{levelModel.FileExtension}");
             }
 
             return ImagesUrl;
         }
-    }    
+    }
 }

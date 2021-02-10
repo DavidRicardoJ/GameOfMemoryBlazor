@@ -11,13 +11,18 @@ namespace GameOfMemoryBlazor.Models.LevelsConfiguration
         {
             NumberOfImages = 6;
 
-            ColumnNumber = 3;
+            ColumnNumber = 4;
 
             ImageBaseUrl = "/Images/Levels/Level1/";
 
-            DisplayTime = 5; // segundos
+            FileExtension = ".png";            
 
             ImageDefaultCardUrl = @"/Images/ImageDefaultCard/Question.png";
+
+            CardHeight = 200;
+
+            CardWidth = 150;
+
         }
     }
 }

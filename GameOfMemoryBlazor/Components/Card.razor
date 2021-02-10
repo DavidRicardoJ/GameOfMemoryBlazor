@@ -1,28 +1,32 @@
 ﻿
-<h1>Jogo da Memória</h1>
-<br />
 
 @if (ListUrlImages.Count > 0)
 {
-    <div class="game-container">
+    <div class="game-container" id="container" style="@ContainerStyle">
 
         @for (int i = 0; i < NumberImages; i++)
         {
             int j = i;
-            <div class=" @ClassName[j]" @onclick="()=> FlipCard(j)">
+            <div class=" @ClassName[j]" @onclick="()=> FlipCard(j)" style="@MemoryCardStyle">
                 <img src="@ListUrlImages[i]" class="front-card" />
                 <img src="@ImageDefaultCard" class="back-card" />
             </div>
         }
     </div>
+    <div>
+        <ButtonsLevel Level1="()=> {RestartGame(new Level1Configuration());}" Level2="() => {RestartGame(new Level2Configuration());}"></ButtonsLevel>
+    </div>
+
 }
 else
 {
     <h2>Loading ...</h2>
 }
 
-<Modal @ref="modal" Title="Jogo da Memória" Show="modalIsVisible" Confirm="RestartGame" >
-    <div >
+
+
+<Modal @ref="modal" Title="Jogo da Memória" Show="modalIsVisible" Confirm="()=> { RestartGame(_level); }">
+    <div>
         <h2>Parabéns!</h2>
         <h3>Você conseguiu em @attempts tentativas.</h3>
     </div>
@@ -35,6 +39,12 @@ else
     [Parameter] public int NumberImages { get; set; }
     [Parameter] public List<string> ListUrlImages { get; set; }
     [Parameter] public string ImageDefaultCard { get; set; }
+    [Parameter] public int ColumnNumber { get; set; }
+
+    string ContainerStyle => $"grid-template-columns: repeat({ColumnNumber}, 1fr);";
+    string MemoryCardStyle => $"width: {_level.CardWidth}px; height: {_level.CardHeight}px;";
+
+    LevelModel _level;
     private List<string> ClassName { get; set; } = new List<string>();
     Modal modal;
     GameContainer game;
@@ -47,7 +57,9 @@ else
 
     protected override void OnInitialized()
     {
+        _level = new Level1Configuration();
         game = new GameContainer();
+
         AddClassName();
     }
 
@@ -120,10 +132,14 @@ else
 
     }
 
-    private void RestartGame()
+    public void RestartGame(LevelModel level)
     {
+        _level = level;
+        ColumnNumber = _level.ColumnNumber;
+        ImageDefaultCard = game.GetImageDefault(_level);
         modalIsVisible = false;
-        ListUrlImages = game.GetImagesUrl(new Level1Configuration());
+        NumberImages = _level.NumberOfImages * 2;
+        ListUrlImages = game.GetImagesUrl(_level);
         cardPosition1 = 0; cardPosition2 = 0; cards = 0;
         isBlock = false;
         pairs.Clear();
@@ -134,5 +150,30 @@ else
     }
 
 
+
 }
 
+<style>
+@@media(max-width: 43em) and (orientation:portrait) {
+    .memory-card {
+        width: 100px !important;
+        height: 100px !important;
+    }
+}
+
+    @@media(max-width: 28.12em) and (orientation:portrait) {
+        .memory-card {
+            width: 60px !important;
+            height: 60px !important;
+        }
+    }
+    @@media(max-width: 41.8em) and (orientation:landscape) {
+        .memory-card {
+            width: 60px !important;
+            height: 60px !important;
+        }
+    }
+
+
+
+</style>

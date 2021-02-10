@@ -1,0 +1,57 @@
+﻿
+<div id="level" class="fixed-bottom">
+    <button type="button" class="btn btn-primary btn-lg" @onclick="Level1">Nível 1</button>
+    <button type="button" class="btn btn-primary btn-lg" @onclick="Level2">Nível 2</button>
+    <button type="button" class="btn btn-primary btn-lg">Nível 3</button>
+</div>
+
+
+@code {
+    [Parameter] public EventCallback Level1 { get; set; }
+    [Parameter] public EventCallback Level2 { get; set; }
+    [Parameter] public EventCallback Level3 { get; set; }
+
+   
+}
+
+<style>
+    #level {
+        background-color: gold;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        align-items: center;
+        align-content: center;
+        justify-content: space-around;
+        width: 100%;
+        height: 60px;
+    }
+
+        #level button {
+            padding: 10px;
+        }
+
+            #level button:hover {
+                -webkit-box-shadow: -4px 1px 52px 13px rgba(7,217,63,1);
+                -moz-box-shadow: -4px 1px 52px 13px rgba(7,217,63,1);
+                box-shadow: -4px 1px 52px 13px rgba(7,217,63,1);
+            }
+
+    @@media(max-width: 64em) and (orientation:landscape) {
+        #level {              
+            height: 35px !important;           
+        }
+            #level button {
+                padding: 2px;
+            }
+    }
+
+   /* @@media(max-width: 40em) and (orientation:landscape) {
+        #level {            
+            height: 35px !important;
+        }
+            #level button {
+                padding: 2px;
+            }
+    }*/
+</style>

@@ -16,7 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\Images\Levels\Level2\" />
     <Folder Include="wwwroot\Images\Levels\Level3\" />
     <Folder Include="wwwroot\Images\Levels\Level4\" />
     <Folder Include="wwwroot\Images\Levels\Level5\" />
